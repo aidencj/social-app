@@ -16,7 +16,7 @@ app.use(postRouter);
 // let postObject = await platform.getPost(0);
 // printPostInfo(postObject);
 
-app.listen(PORT, "127.0.0.1", () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`connected at PORT: ${PORT}`);
 })
 
