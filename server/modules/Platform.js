@@ -33,4 +33,13 @@ export class Platform{
     let cid = await this.blockchain.getPostURI(tokenID);
     return await this.ipfsClient.get(cid);
   }
+
+  async getAllPost() {
+    let totalSupply = await this.blockchain.getTotalSupply();
+    let allPosts = new Array();
+    for(let i = 0; i < totalSupply; i++) {
+      allPosts.push(await this.getPost(i));
+    }
+    return allPosts;
+  }
 }

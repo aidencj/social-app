@@ -8,3 +8,13 @@ postRouter.post("/api/post", async (req, res) => {
   console.log(req.body);
   res.send(await platform.post(author, title, context, emotion));
 })
+
+postRouter.post("/api/get-post", async (req, res) => {
+  const {tokenID} = req.body;
+  console.log(req.body);
+  res.send(await platform.getPost(tokenID));
+})
+
+postRouter.get("/api/get-post", async (req, res) => {
+  res.send(await platform.getAllPost());
+})

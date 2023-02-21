@@ -48,4 +48,18 @@ export class Blockchain {
       })
     })
   }
+
+  getTotalSupply() {
+    return new Promise((resolve, reject) => {
+      this.PostNFT.methods
+      .getTotalSupply()
+      .call(function(err, res) {
+        if (err) {
+          reject(`An error occurred in getTotalSupply: ${err}`);
+          return;
+        }
+        resolve(res);
+      })
+    })
+  }
 };
