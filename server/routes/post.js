@@ -15,6 +15,6 @@ postRouter.post("/api/get-post", async (req, res) => {
   res.send(await platform.getPost(tokenID));
 })
 
-postRouter.get("/api/get-post", async (req, res) => {
+postRouter.get("/api/get-all-posts", async (req, res) => {
   res.send(await platform.getAllPost());
 })
