@@ -37,8 +37,14 @@ export class Platform{
   async getAllPost() {
     let totalSupply = await this.blockchain.getTotalSupply();
     let allPosts = new Array();
+    console.log(`totalSupply: ${totalSupply}`);
     for(let i = 0; i < totalSupply; i++) {
-      allPosts.push(await this.getPost(i));
+      try {
+        allPosts.push(await this.getPost(i));
+      }
+      catch (err) {
+        console.error(err);
+      }
     }
     return allPosts;
   }
