@@ -51,7 +51,7 @@ export class Platform{
 
   async getAllPostOwnedBy(owner) {
     let totalSupply = await this.blockchain.getTotalSupply();
-    let ret = new Array();
+    let allPosts = new Array();
 
     for(let i = 0; i < totalSupply; i++) {
       try {
