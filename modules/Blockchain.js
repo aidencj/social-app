@@ -62,4 +62,18 @@ export class Blockchain {
       })
     })
   }
+
+  getOwnerOfPost(tokenID) {
+    return new Promise((resolve, reject) => {
+      this.PostNFT.methods
+      .ownerOf(tokenID)
+      .call(function(err, res) {
+        if (err) {
+          reject(`An error occurred in getOwnerOfPost: ${err}`);
+          return;
+        }
+        resolve(res);
+      })
+    })
+  }
 };

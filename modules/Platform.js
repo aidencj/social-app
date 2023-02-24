@@ -48,4 +48,20 @@ export class Platform{
     }
     return allPosts;
   }
+
+  async getAllPostOwnedBy(owner) {
+    let totalSupply = await this.blockchain.getTotalSupply();
+    let ret = new Array();
+
+    for(let i = 0; i < totalSupply; i++) {
+      try {
+        if(await this.blockchain.getOwnerOfPost(i) == owner)
+          allPosts.push(await this.getPost(i));
+      }
+      catch (err) {
+        console.error(err);
+      }
+    }
+    return allPosts;
+  }
 }

@@ -18,3 +18,10 @@ postRouter.post("/api/get-post", async (req, res) => {
 postRouter.get("/api/get-all-posts", async (req, res) => {
   res.send(await platform.getAllPost());
 })
+
+postRouter.post("/api/get-all-posts-owned-by", async(req, res) => {
+  const {owner} = req.body;
+  console.log(req.body);
+  res.send(await platform.getAllPostOwnedBy(owner));
+})
+
