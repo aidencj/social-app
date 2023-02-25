@@ -51,7 +51,8 @@ export class Platform{
 
     for(let i = 0; i < totalSupply; i++) {
       try {
-        if(await this.blockchain.getOwnerOfPost(i) == owner)
+        let postOwner = await this.blockchain.getOwnerOfPost(i);
+        if(postOwner.toLowerCase() == owner.toLowerCase())
           allPosts.push(await this.getPost(i));
       }
       catch (err) {
