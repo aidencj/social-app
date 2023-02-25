@@ -37,7 +37,7 @@ export class IpfsClient {
 
         // The whole response has been received. Print out the result.
         resp.on('end', () => {
-          resolve(rawData);
+          resolve(JSON.parse(rawData));
         });
 
       }).on("error", (err) => {
