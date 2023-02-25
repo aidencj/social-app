@@ -50,19 +50,13 @@ export class IpfsClient {
 
     /**
      * Upload a post to web3.storage
-     * @param {string} author The address of the author.
-     * @param {string} title The title of the post.
-     * @param {string} context The context of the post.
-     * @param {string} emotion The emotion of the post.
+     * @param {string} postData The JSON string of the post.
      * @return {Promise<CIDString>} Returns the corresponding Content Identifier (CID).
      */
-    async post(postObject){
-        let rawData = JSON.stringify(postObject, null, 2);
+    async post(postData){
         let filename = `Post.json`;
-        writeFileSync(filename, rawData);
+        writeFileSync(filename, postData);
         let cid = await this.put(filename);
-        console.log(`Put ${postObject.author}'s post (${postObject.title}) to IPFS.`)
-        console.log(`CID: ${postObject.cid}`)
         unlink(filename, (err) => {
             if (err) throw err;
         });
