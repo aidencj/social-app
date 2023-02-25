@@ -25,7 +25,7 @@ export class IpfsClient {
    * which contains {"author", "title", "context", "emotion"}
    */
   get(cid) {
-    return Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       let rawData = '';
       console.log(`CID: ${cid}`);
       https.get(`https://${cid}.ipfs.w3s.link/Post.json`, (resp) => {
