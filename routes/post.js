@@ -11,19 +11,17 @@ postRouter.post("/api/post", async (req, res) => {
   console.log(`CID: ${cid}`)
 })
 
-postRouter.post("/api/get-post", async (req, res) => {
-  const {tokenID} = req.body;
+postRouter.get("/api/get-post", async (req, res) => {
   console.log(req.body);
-  res.send(await platform.getPost(tokenID));
+  res.send(await platform.getPost(req.query.tokenID));
 })
 
 postRouter.get("/api/get-all-posts", async (req, res) => {
   res.send(await platform.getAllPost());
 })
 
-postRouter.post("/api/get-all-posts-owned-by", async(req, res) => {
-  const {owner} = req.body;
-  console.log(req.body);
-  res.send(await platform.getAllPostOwnedBy(owner));
+postRouter.get("/api/get-all-posts-owned-by", async(req, res) => {
+  console.log(req.query);
+  res.send(await platform.getAllPostOwnedBy(req.query.owner));
 })
 
