@@ -61,8 +61,8 @@ export class IpfsClient {
         let filename = `Post.json`;
         writeFileSync(filename, rawData);
         let cid = await this.put(filename);
-        console.log(`Put ${author}'s post (${title}) to IPFS.`)
-        console.log(`CID: ${cid}`)
+        console.log(`Put ${rawData.author}'s post (${rawData.title}) to IPFS.`)
+        console.log(`CID: ${rawData.cid}`)
         unlink(filename, (err) => {
             if (err) throw err;
         });
