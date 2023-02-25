@@ -50,12 +50,12 @@ export class IpfsClient {
 
     /**
      * Upload a post to web3.storage
-     * @param {string} postData The JSON string of the post.
+     * @param {object} postObject The JSON object of the post.
      * @return {Promise<CIDString>} Returns the corresponding Content Identifier (CID).
      */
-    async post(postData){
+    async post(postObject){
         let filename = `Post.json`;
-        writeFileSync(filename, postData);
+        writeFileSync(filename, JSON.stringify(postObject));
         let cid = await this.put(filename);
         unlink(filename, (err) => {
             if (err) throw err;

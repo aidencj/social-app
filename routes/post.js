@@ -4,11 +4,10 @@ import {platform} from '../app.js';
 export const postRouter = express.Router();
 
 postRouter.post("/api/post", async (req, res) => {
-  const {author, title, emotion} = req.body;
   console.log(req.body);
-  let cid = await platform.post(author, emotion, req.body);
+  let cid = await platform.post(req.body);
   res.send(cid);
-  console.log(`Put ${author}'s post (${title}) to IPFS.`)
+  console.log(`Put ${req.body.author}'s post (${req.body.title}) to IPFS.`)
   console.log(`CID: ${cid}`)
 })
 

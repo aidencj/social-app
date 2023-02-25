@@ -13,12 +13,10 @@ export class Platform{
 
   /**
    * Upload the post to IPFS and store the CID to NFT Contract.
-   * @param {String} author The address of the author.
-   * @param {String} emotion The emotion of the post.
-   * @param {String} postData The JSON string of the post.
+   * @param {object} postObject The JSON object of the post.
    */
-  async post(author, emotion, postData) {
-    let cid = await this.ipfsClient.post(postData);
+  async post(postObject) {
+    let cid = await this.ipfsClient.post(postObject);
     this.blockchain.post(author, cid);
     return cid;
   }
