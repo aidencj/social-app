@@ -17,7 +17,6 @@ export class Platform{
    */
   async post(postObject) {
     let cid = await this.ipfsClient.post(postObject);
-    this.blockchain.post(author, cid);
     return cid;
   }
 
