@@ -1,5 +1,6 @@
 import { Web3Storage, getFilesFromPath } from 'web3.storage';
 import { readFileSync, writeFileSync, unlink } from 'fs';
+import https from 'https';
 
 export class IpfsClient {
     constructor(WEB3_STORAGE_TOKEN) {
@@ -24,9 +25,26 @@ export class IpfsClient {
      * which contains {"author", "title", "context", "emotion"}
      */
     async get(cid) {
-        let res = await this.client.get(cid); // Web3Response
-        let files = await res.files(); // Web3File[]
-        let rawData = await files[0].text();
+        // let res = await this.client.get(cid); // Web3Response
+        // let files = await res.files(); // Web3File[]
+        // let rawData = await files[0].text();
+        let rawData = '';
+        console.log(`CID: ${cid}`);
+        https.get(`https://${cid}.ipfs.w3s.link/Post.json`, (resp) => {
+
+            // A chunk of data has been received.
+            resp.on('data', (chunk) => {
+                rawData += chunk;
+            });
+
+            // The whole response has been received. Print out the result.
+            resp.on('end', () => {
+                console.log(rawData);
+            });
+
+        }).on("error", (err) => {
+            console.log("Error: " + err.message);
+        });
         return JSON.parse(rawData);
     }
 
@@ -38,15 +56,9 @@ export class IpfsClient {
      * @param {string} emotion The emotion of the post.
      * @return {Promise<CIDString>} Returns the corresponding Content Identifier (CID).
      */
-    async post(author, title, context, emotion){
-        let postObject = {
-            "author": author,
-            "title": title,
-            "context": context,
-            "emotion": emotion
-        }
+    async post(postObject){
         let rawData = JSON.stringify(postObject, null, 2);
-        let filename = `temp_${author}.json`;
+        let filename = `Post.json`;
         writeFileSync(filename, rawData);
         let cid = await this.put(filename);
         console.log(`Put ${author}'s post (${title}) to IPFS.`)
