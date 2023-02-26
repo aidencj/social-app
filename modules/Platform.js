@@ -9,6 +9,7 @@ export class Platform{
     this.CONFIG = CONFIG;
     this.blockchain = new Blockchain(this.CONFIG);
     this.ipfsClient = new IpfsClient(this.CONFIG.WEB3_STORAGE_TOKEN);
+    this.posts = new Array();
   }
 
   /**
@@ -30,35 +31,57 @@ export class Platform{
     return await this.ipfsClient.get(cid);
   }
 
-  async getAllPost() {
+  async syncPosts() {
     let totalSupply = await this.blockchain.getTotalSupply();
-    let allPosts = new Array();
-    console.log(`totalSupply: ${totalSupply}`);
-    for(let i = 0; i < totalSupply; i++) {
+    if(this.posts.lengh == totalSupply)
+      return;
+    
+    for(let i = this.posts.length; i < totalSupply; i++){
       try {
-        allPosts.push(await this.getPost(i));
+        this.posts.push(await this.getPost(i));
       }
       catch (err) {
         console.error(err);
       }
     }
-    return allPosts;
+  }
+
+  async getAllPost() {
+    // let totalSupply = await this.blockchain.getTotalSupply();
+    // let allPosts = new Array();
+    // console.log(`totalSupply: ${totalSupply}`);
+    // for(let i = 0; i < totalSupply; i++) {
+    //   try {
+    //     allPosts.push(await this.getPost(i));
+    //   }
+    //   catch (err) {
+    //     console.error(err);
+    //   }
+    // }
+    await this.syncPosts();
+    return this.posts;
   }
 
   async getAllPostOwnedBy(owner) {
-    let totalSupply = await this.blockchain.getTotalSupply();
-    let allPosts = new Array();
+    // let totalSupply = await this.blockchain.getTotalSupply();
+    // let allPosts = new Array();
 
-    for(let i = 0; i < totalSupply; i++) {
-      try {
-        let postOwner = await this.blockchain.getOwnerOfPost(i);
-        if(postOwner.toLowerCase() == owner.toLowerCase())
-          allPosts.push(await this.getPost(i));
-      }
-      catch (err) {
-        console.error(err);
-      }
+    // for(let i = 0; i < totalSupply; i++) {
+    //   try {
+    //     let postOwner = await this.blockchain.getOwnerOfPost(i);
+    //     if(postOwner.toLowerCase() == owner.toLowerCase())
+    //       allPosts.push(await this.getPost(i));
+    //   }
+    //   catch (err) {
+    //     console.error(err);
+    //   }
+    // }
+    await this.syncPosts();
+    let ret = new Array();
+    for(let i = 0; i < this.posts.length; i++){
+      if(this.posts[i].author.toLowerCase() == owner.toLowerCase())
+        ret.push(this.posts[i]);
     }
-    return allPosts;
+    return ret;
   }
 }
