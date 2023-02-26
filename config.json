@@ -1,6 +1,6 @@
 {
     "PROVIDER_URL": "https://goerli.infura.io/v3/4b3aa0c8a4664f469816adaea1ca6572",
-    "CONTRACT_ADDRESS": "0x46ae686d9b95796e5fe607681d32b0353e85e6ab",
+    "CONTRACT_ADDRESS": "0x241c38baadbccd562ec2779dfe3c58b94a78b498",
     "ADDRESS": "0x46ae686d9B95796E5fE607681D32b0353E85E6aB",
     "ABI_PATH": "./abi.json",
     "GAS_LIMIT": 3000000,
