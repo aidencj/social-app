@@ -7,7 +7,7 @@ postRouter.post("/api/post", async (req, res) => {
   console.log(req.body);
   let cid = await platform.post(req.body);
   res.send(cid);
-  console.log(`Put ${req.body.author}'s post (${req.body.title}) to IPFS.`)
+  console.log(`Put ${req.body.author}'s post to IPFS.`)
   console.log(`CID: ${cid}`)
 })
 
