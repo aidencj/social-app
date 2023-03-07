@@ -89,4 +89,9 @@ export class Platform{
     let cid = await this.ipfsClient.uploadUserInfo(userInfoObject);
     return cid;
   }
+
+  async getUserInfo(address) {
+    let cid = await this.blockchain.getUserInfo(address);
+    return cid;
+  }
 }

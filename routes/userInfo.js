@@ -22,3 +22,8 @@ userInfoRouter.post("/api/setUserInfo", async (req, res) => {
   console.log(`Put ${req.body.name}'s info to IPFS.`);
   console.log(`CID: ${cid}`);
 })
+
+userInfoRouter.get("/api/getUserInfo", async (req, res) => {
+  let cid = await platform.getUserInfo(req.query.address);
+  res.send(cid);
+})

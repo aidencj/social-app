@@ -9,9 +9,11 @@ export class Blockchain {
   constructor(CONFIG) {
     this.CONFIG = CONFIG;
     let web3 = new Web3(this.CONFIG.PROVIDER_URL);
-    let abi = readJSON(this.CONFIG.ABI_PATH, 'utf8');
+    let abi_PostNFT = readJSON(this.CONFIG.ABI_PATH_PostNFT, 'utf8');
+    let abi_UserInfo = readJSON(this.CONFIG.ABI_PATH_UserInfo, 'utf8');
     
-    this.PostNFT = new web3.eth.Contract(abi, this.CONFIG.CONTRACT_ADDRESS);
+    this.PostNFT = new web3.eth.Contract(abi_PostNFT, this.CONFIG.CONTRACT_ADDRESS_PostNFT);
+    this.UserInfo = new web3.eth.Contract(abi_UserInfo, this.CONFIG.CONTRACT_ADDRESS_UserInfo);
   }
 
   /**
@@ -67,6 +69,20 @@ export class Blockchain {
     return new Promise((resolve, reject) => {
       this.PostNFT.methods
       .ownerOf(tokenID)
+      .call(function(err, res) {
+        if (err) {
+          reject(`An error occurred in getOwnerOfPost: ${err}`);
+          return;
+        }
+        resolve(res);
+      })
+    })
+  }
+
+  getUserInfo(address) {
+    return new Promise((resolve, reject) => {
+      this.UserInfo.methods
+      .getUserInfo(address)
       .call(function(err, res) {
         if (err) {
           reject(`An error occurred in getOwnerOfPost: ${err}`);
