@@ -14,7 +14,7 @@ userInfoRouter.post("/api/setUserInfo", async (req, res) => {
       'filename': req.body.filename,
       'imageCid': imageCid
   };
-  let cid = platform.ipfsClient.uploadUserInfo(userInfoObject);
+  let cid = await platform.ipfsClient.uploadUserInfo(userInfoObject);
   res.send(cid);
   console.log(`Put ${req.body.name}'s info to IPFS.`);
   console.log(`CID: ${cid}`);
