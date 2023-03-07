@@ -84,4 +84,9 @@ export class Platform{
     }
     return ret;
   }
+
+  async uploadUserInfo(userInfoObject) {
+    let cid = await this.ipfsClient.uploadUserInfo(userInfoObject);
+    return cid;
+  }
 }

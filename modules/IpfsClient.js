@@ -60,4 +60,14 @@ export class IpfsClient {
     });
     return cid;
   }
+
+  async uploadUserInfo(userInfoObject) {
+    let filename = 'userInfo.json';
+    writeFileSync(filename, JSON.stringify(userInfoObject));
+    let cid = await this.put(filename);
+    unlink(filename, (err) => {
+      if(err) throw err;
+    });
+    return cid;
+  }
 }

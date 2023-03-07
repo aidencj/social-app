@@ -1,7 +1,8 @@
 import {Platform} from './modules/Platform.js';
-import {printPostInfo, readJSON} from './modules/utility.js'
+import {printPostInfo, readJSON} from './modules/utility.js';
 import express from 'express';
-import {postRouter} from './routes/post.js'
+import {postRouter} from './routes/post.js';
+import {userInfoRouter} from './routes/userInfo.js';
 
 const CONFIG = readJSON('./config.json');
 export const platform = new Platform(CONFIG);
@@ -11,6 +12,7 @@ const app = express();
 
 app.use(express.json());
 app.use(postRouter);
+app.use(userInfoRouter);
 
 // platform.post("0x5B8f30596468CA451587Ae77449cea5e2Cf8c8c5", "The first article", "Hi, everyone!", "Exciting");
 // let postObject = await platform.getPost(0);
