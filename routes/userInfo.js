@@ -7,7 +7,10 @@ userInfoRouter.post("/api/setUserInfo", async (req, res) => {
   console.log(req.body);
   let image = Buffer.from(req.body.image, 'base64');
   fs.writeFileSync(req.body.filename, image, 'utf8');
-  let imageCid = platform.ipfsClient.put(req.body.filename);
+  let imageCid = await platform.ipfsClient.put(req.body.filename);
+  unlink(req.body.filename, (err) => {
+    if(err) throw err;
+  });
   let userInfoObject = {
       'name': req.body.name,
       'location': req.body.location,
