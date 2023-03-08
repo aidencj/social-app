@@ -31,6 +31,11 @@ userInfoRouter.post("/api/setUserInfo", async (req, res) => {
 })
 
 userInfoRouter.get("/api/getUserInfo", async (req, res) => {
-  let cid = await platform.getUserInfo(req.query.address);
-  res.send(cid);
+  let infoObject = await platform.getUserInfo(req.query.address);
+  res.send(infoObject);
+})
+
+userInfoRouter.get("/api/check-if-user-info-should-update", async (req, res) => {
+  platform.checkIfUserInfoShouldUpdate(req.query.address);
+  res.end();
 })

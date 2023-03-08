@@ -11,6 +11,7 @@ export class Platform{
     this.ipfsClient = new IpfsClient(this.CONFIG.WEB3_STORAGE_TOKEN);
     this.posts = new Array();
     this.userInfo = new Map();
+    this.userInfoCid = new Map();
   }
 
   /**
@@ -24,27 +25,16 @@ export class Platform{
 
   /**
    * Get the post object by its tokenID.
-   * @param {Number} tokenID The tokenID of that post
+   * @param {Number} id The tokenID of that post
    * @returns An post object.
    */
-  async getPost(tokenID) {
-    let postCid = await this.blockchain.getPostURI(tokenID);
-    let postObject = await this.ipfsClient.get(postCid, 'Post.json');
-    if(!this.userInfo.has(postObject.author)){
-      await this.getUserInfo(postObject.author);
-    }
-    let infoCid = await this.userInfo.get(postObject.author);
-    // if(infoCid != ''){
-    //   let infoObject = await this.ipfsClient.get(infoCid, 'userInfo.json');
-    //   postObject.name = infoObject.name;
-    //   postObject.imageCid = infoObject.imageCid;
-    //   postObject.filename = infoObject.filename;
-    // }
-    if(infoCid != ''){
-      let infoObject = await this.ipfsClient.get(infoCid, 'userInfo.json');
-      postObject.userInfo = infoObject;
-    }
-    return postObject;
+  async getPost(id){
+    let infoObject = await this.getUserInfo(this.posts[id].author);
+    if(!('name' in infoObject))
+      return this.posts[id];
+    let clonedPost = structuredClone(this.posts[id]);
+    clonedPost.userInfo = infoObject;
+    return clonedPost;
   }
 
   async syncPosts() {
@@ -54,7 +44,9 @@ export class Platform{
     
     for(let i = this.posts.length; i < totalSupply; i++){
       try {
-        this.posts.push(await this.getPost(i));
+        let postCid = await this.blockchain.getPostURI(i);
+        let postObject = await this.ipfsClient.get(postCid, 'Post.json');
+        this.posts.push(postObject);
       }
       catch (err) {
         console.error(err);
@@ -63,40 +55,20 @@ export class Platform{
   }
 
   async getAllPost() {
-    // let totalSupply = await this.blockchain.getTotalSupply();
-    // let allPosts = new Array();
-    // console.log(`totalSupply: ${totalSupply}`);
-    // for(let i = 0; i < totalSupply; i++) {
-    //   try {
-    //     allPosts.push(await this.getPost(i));
-    //   }
-    //   catch (err) {
-    //     console.error(err);
-    //   }
-    // }
     await this.syncPosts();
-    return this.posts;
+    let ret = new Array();
+    for(let i = 0; i < this.posts.length; i++){
+      ret.push(await this.getPost(i));
+    }
+    return ret;
   }
 
   async getAllPostOwnedBy(owner) {
-    // let totalSupply = await this.blockchain.getTotalSupply();
-    // let allPosts = new Array();
-
-    // for(let i = 0; i < totalSupply; i++) {
-    //   try {
-    //     let postOwner = await this.blockchain.getOwnerOfPost(i);
-    //     if(postOwner.toLowerCase() == owner.toLowerCase())
-    //       allPosts.push(await this.getPost(i));
-    //   }
-    //   catch (err) {
-    //     console.error(err);
-    //   }
-    // }
     await this.syncPosts();
     let ret = new Array();
     for(let i = 0; i < this.posts.length; i++){
       if(this.posts[i].author.toLowerCase() == owner.toLowerCase())
-        ret.push(this.posts[i]);
+        ret.push(await this.getPost(i));
     }
     return ret;
   }
@@ -107,8 +79,25 @@ export class Platform{
   }
 
   async getUserInfo(address) {
+    if(this.userInfo.has(address))
+      return this.userInfo.get(address);
+    
     let cid = await this.blockchain.getUserInfo(address);
-    this.userInfo.set(address, cid);
-    return cid;
+    if(cid == ""){
+      return {};
+    }
+    let infoObject = await this.ipfsClient.get(cid, 'userInfo.json');
+    this.userInfoCid.set(address, cid);
+    this.userInfo.set(address, infoObject);
+    return infoObject
+  }
+
+  async checkIfUserInfoShouldUpdate(address){
+    let cid = await this.blockchain.getUserInfo(address);
+    if(cid != "" && cid != this.userInfoCid){
+      let infoObject = await this.ipfsClient.get(cid, 'userInfo.json');
+      this.userInfoCid.set(address, cid);
+      this.userInfo.set(address, infoObject);
+    }
   }
 }
