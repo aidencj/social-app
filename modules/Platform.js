@@ -31,15 +31,19 @@ export class Platform{
     let postCid = await this.blockchain.getPostURI(tokenID);
     let postObject = await this.ipfsClient.get(postCid, 'Post.json');
     if(!this.userInfo.has(postObject.author)){
-      this.getUserInfo(postObject.author);
+      await this.getUserInfo(postObject.author);
     }
-    // let infoCid = this.userInfo.get(postObject.author);
+    let infoCid = await this.userInfo.get(postObject.author);
     // if(infoCid != ''){
     //   let infoObject = await this.ipfsClient.get(infoCid, 'userInfo.json');
     //   postObject.name = infoObject.name;
     //   postObject.imageCid = infoObject.imageCid;
     //   postObject.filename = infoObject.filename;
     // }
+    if(infoCid != ''){
+      let infoObject = await this.ipfsClient.get(infoCid, 'userInfo.json');
+      postObject.userInfo = infoObject;
+    }
     return postObject;
   }
 
