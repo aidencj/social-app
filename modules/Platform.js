@@ -32,10 +32,10 @@ export class Platform{
     let infoObject = await this.getUserInfo(this.posts[id].author);
 
     if(!('name' in infoObject))
-      return {'postContext': this.posts[id]};
+      return {'context': this.posts[id]};
     
     return {
-      'postContext': this.posts[id],
+      'context': this.posts[id],
       'userInfo': infoObject
     };
   }
