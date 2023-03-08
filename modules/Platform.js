@@ -30,11 +30,14 @@ export class Platform{
    */
   async getPost(id){
     let infoObject = await this.getUserInfo(this.posts[id].author);
+    
     if(!('name' in infoObject))
-      return this.posts[id];
-    let clonedPost = structuredClone(this.posts[id]);
-    clonedPost.userInfo = infoObject;
-    return clonedPost;
+      return {'postContext': this.posts[id]};
+    
+    return {
+      'postContext': this.posts[id],
+      'userInfo': infoObject
+    };
   }
 
   async syncPosts() {
