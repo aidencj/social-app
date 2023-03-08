@@ -36,6 +36,6 @@ userInfoRouter.get("/api/getUserInfo", async (req, res) => {
 })
 
 userInfoRouter.get("/api/check-if-user-info-should-update", async (req, res) => {
-  platform.checkIfUserInfoShouldUpdate(req.query.address);
+  await platform.checkIfUserInfoShouldUpdate(req.query.address);
   res.end();
 })
