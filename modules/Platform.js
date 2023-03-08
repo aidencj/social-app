@@ -10,6 +10,7 @@ export class Platform{
     this.blockchain = new Blockchain(this.CONFIG);
     this.ipfsClient = new IpfsClient(this.CONFIG.WEB3_STORAGE_TOKEN);
     this.posts = new Array();
+    this.userInfo = new Map();
   }
 
   /**
@@ -28,7 +29,12 @@ export class Platform{
    */
   async getPost(tokenID) {
     let cid = await this.blockchain.getPostURI(tokenID);
-    return await this.ipfsClient.get(cid);
+    let postObject = await this.ipfsClient.get(cid);
+    if(!this.userInfo.has(postObject.author)){
+      this.getUserInfo(postObject.author);
+    }
+    postObject.userInfo = this.userInfo.get(postObject.author);
+    return postObject;
   }
 
   async syncPosts() {
@@ -92,6 +98,7 @@ export class Platform{
 
   async getUserInfo(address) {
     let cid = await this.blockchain.getUserInfo(address);
+    this.userInfo.set(address, cid);
     return cid;
   }
 }
