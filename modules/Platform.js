@@ -33,7 +33,10 @@ export class Platform{
     if(!this.userInfo.has(postObject.author)){
       this.getUserInfo(postObject.author);
     }
-    postObject.userInfo = this.userInfo.get(postObject.author);
+    let info = this.userInfo.get(postObject.author);
+    postObject.name = info.name;
+    postObject.imageCid = info.imageCid;
+    postObject.filename = info.filename;
     return postObject;
   }
 
