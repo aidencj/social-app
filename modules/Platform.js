@@ -95,7 +95,7 @@ export class Platform{
 
   async checkIfUserInfoShouldUpdate(address){
     let cid = await this.blockchain.getUserInfo(address);
-    if(cid != "" && cid != this.userInfoCid){
+    if(cid != "" && (!this.userInfoCid.has(address) || cid != this.userInfoCid.get(address))){
       let infoObject = await this.ipfsClient.get(cid, 'userInfo.json');
       this.userInfoCid.set(address, cid);
       this.userInfo.set(address, infoObject);
