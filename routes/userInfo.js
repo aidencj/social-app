@@ -5,12 +5,19 @@ export const userInfoRouter = express.Router();
 
 userInfoRouter.post("/api/setUserInfo", async (req, res) => {
   console.log(req.body);
-  let image = Buffer.from(req.body.image, 'base64');
-  writeFileSync(req.body.filename, image, 'utf8');
-  let imageCid = await platform.ipfsClient.put(req.body.filename);
-  unlink(req.body.filename, (err) => {
-    if(err) throw err;
-  });
+  let imageCid;
+  if('image' in req.body){
+    let image = Buffer.from(req.body.image, 'base64');
+    writeFileSync(req.body.filename, image, 'utf8');
+    imageCid = await platform.ipfsClient.put(req.body.filename);
+    unlink(req.body.filename, (err) => {
+      if(err) throw err;
+    });
+  }
+  else{
+    imageCid = req.body.imageCid;
+  }
+  
   let userInfoObject = {
     'name': req.body.name,
     'location': req.body.location,

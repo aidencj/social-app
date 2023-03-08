@@ -10,13 +10,10 @@ export const platform = new Platform(CONFIG);
 const PORT = CONFIG.PORT;
 const app = express();
 
-app.use(express.json());
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb'}));
 app.use(postRouter);
 app.use(userInfoRouter);
-
-// platform.post("0x5B8f30596468CA451587Ae77449cea5e2Cf8c8c5", "The first article", "Hi, everyone!", "Exciting");
-// let postObject = await platform.getPost(0);
-// printPostInfo(postObject);
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`connected at PORT: ${PORT}`);
