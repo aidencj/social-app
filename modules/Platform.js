@@ -33,13 +33,13 @@ export class Platform{
     if(!this.userInfo.has(postObject.author)){
       this.getUserInfo(postObject.author);
     }
-    let infoCid = this.userInfo.get(postObject.author);
-    if(infoCid != ''){
-      let infoObject = await this.ipfsClient.get(infoCid, 'userInfo.json');
-      postObject.name = infoObject.name;
-      postObject.imageCid = infoObject.imageCid;
-      postObject.filename = infoObject.filename;
-    }
+    // let infoCid = this.userInfo.get(postObject.author);
+    // if(infoCid != ''){
+    //   let infoObject = await this.ipfsClient.get(infoCid, 'userInfo.json');
+    //   postObject.name = infoObject.name;
+    //   postObject.imageCid = infoObject.imageCid;
+    //   postObject.filename = infoObject.filename;
+    // }
     return postObject;
   }
 
