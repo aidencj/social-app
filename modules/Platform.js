@@ -30,7 +30,7 @@ export class Platform{
    */
   async getPost(id){
     let infoObject = await this.getUserInfo(this.posts[id].author);
-    
+
     if(!('name' in infoObject))
       return {'postContext': this.posts[id]};
     
@@ -86,10 +86,8 @@ export class Platform{
       return this.userInfo.get(address);
     
     let cid = await this.blockchain.getUserInfo(address);
-    if(cid == ""){
-      return {};
-    }
-    let infoObject = await this.ipfsClient.get(cid, 'userInfo.json');
+    let infoObject = (cid == "")? {}: await this.ipfsClient.get(cid, 'userInfo.json');
+
     this.userInfoCid.set(address, cid);
     this.userInfo.set(address, infoObject);
     return infoObject
