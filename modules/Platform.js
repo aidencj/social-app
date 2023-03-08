@@ -28,15 +28,16 @@ export class Platform{
    * @returns An post object.
    */
   async getPost(tokenID) {
-    let cid = await this.blockchain.getPostURI(tokenID);
-    let postObject = await this.ipfsClient.get(cid);
+    let postCid = await this.blockchain.getPostURI(tokenID);
+    let postObject = await this.ipfsClient.get(postCid, 'Post.json');
     if(!this.userInfo.has(postObject.author)){
       this.getUserInfo(postObject.author);
     }
-    let info = this.userInfo.get(postObject.author);
-    postObject.name = info.name;
-    postObject.imageCid = info.imageCid;
-    postObject.filename = info.filename;
+    let infoCid = this.userInfo.get(postObject.author);
+    let infoObject = await this.ipfsClient.get(infoCid, 'userInfo.json');
+    postObject.name = infoObject.name;
+    postObject.imageCid = infoObject.imageCid;
+    postObject.filename = infoObject.filename;
     return postObject;
   }
 

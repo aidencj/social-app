@@ -24,11 +24,11 @@ export class IpfsClient {
    * @return {object} Returns the post object,
    * which contains {"author", "title", "context", "emotion"}
    */
-  get(cid) {
+  get(cid, filename) {
     return new Promise((resolve, reject) => {
       let rawData = '';
       console.log(`CID: ${cid}`);
-      https.get(`https://${cid}.ipfs.w3s.link/Post.json`, (resp) => {
+      https.get(`https://${cid}.ipfs.w3s.link/${filename}`, (resp) => {
 
         // A chunk of data has been received.
         resp.on('data', (chunk) => {
