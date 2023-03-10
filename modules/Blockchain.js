@@ -74,7 +74,7 @@ export class Blockchain {
           reject(`An error occurred in getOwnerOfPost: ${err}`);
           return;
         }
-        resolve(res);
+        resolve(res.toLowerCase());
       })
     })
   }

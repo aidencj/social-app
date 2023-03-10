@@ -49,6 +49,7 @@ export class Platform{
       try {
         let postCid = await this.blockchain.getPostURI(i);
         let postObject = await this.ipfsClient.get(postCid, 'Post.json');
+        postObject.author = postObject.author.toLowerCase();
         this.posts.push(postObject);
       }
       catch (err) {
